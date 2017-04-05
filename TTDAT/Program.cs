@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 
 namespace TTDAT
@@ -16,7 +13,12 @@ namespace TTDAT
 
             if (args.Length >= 1)
             {
-                FileAttributes attributes = File.GetAttributes(args[0]);
+                using (StreamWriter csv = new StreamWriter("dat_info.csv", false))
+                {
+                    csv.WriteLine("File,Ext,Archive");
+                }
+
+                    FileAttributes attributes = File.GetAttributes(args[0]);
                 if ((attributes & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     Console.WriteLine("Folder path provided, going through all *.dat.");
@@ -47,7 +49,7 @@ namespace TTDAT
             Console.WriteLine("====================");
             Console.WriteLine("Input file: {0}", input);
             BinaryReader br = new BinaryReader(File.Open(input, FileMode.Open));
-            
+            StreamWriter csv = new StreamWriter("dat_info.csv", true);
 
             // Get info data
             uint info_offset = br.ReadUInt32();
@@ -116,6 +118,9 @@ namespace TTDAT
                     if (storage1.ContainsKey(folder_id) && file_id != 0)
                     {
                         Console.WriteLine(storage1[folder_id] + "/" + name);
+                        csv.WriteLine(storage1[folder_id] + "/" + name + "," + 
+                            name.Substring(name.LastIndexOf(".")+1) + "," + 
+                            input.Substring(input.LastIndexOf("\\")+1));
                     }
                     /* Used to print folders only
                     else if (file_id == 0)
@@ -125,8 +130,8 @@ namespace TTDAT
                     br.BaseStream.Seek(last_position, SeekOrigin.Begin);
                 }
             }
-            br.Dispose();
             br.Close();
+            csv.Close();
             Console.WriteLine("====================");
         }
     }
