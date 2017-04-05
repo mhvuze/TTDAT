@@ -30,9 +30,10 @@ namespace TTDAT
                 }
                 else
                 {
+                    Console.WriteLine("Single file provided.");
                     ReadFiles(args[0]);
                 }
-
+                Console.WriteLine("====================");
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
             }
@@ -117,7 +118,7 @@ namespace TTDAT
 
                     if (storage1.ContainsKey(folder_id) && file_id != 0)
                     {
-                        Console.WriteLine(storage1[folder_id] + "/" + name);
+                        //Console.WriteLine(storage1[folder_id] + "/" + name);
                         csv.WriteLine(storage1[folder_id] + "/" + name + "," + 
                             name.Substring(name.LastIndexOf(".")+1) + "," + 
                             input.Substring(input.LastIndexOf("\\")+1));
@@ -132,7 +133,6 @@ namespace TTDAT
             }
             br.Close();
             csv.Close();
-            Console.WriteLine("====================");
         }
     }
 }
